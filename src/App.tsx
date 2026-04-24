@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { AnaSayfa } from './screens/AnaSayfa'
+import { YonlendirmeEkrani } from './screens/YonlendirmeEkrani'
+import { HataSayfasi } from './screens/HataSayfasi'
 import { useLinkHistory } from './hooks/useLinkHistory'
 import { generateShortCode } from './utils/generateCode'
 import type { ShortLink } from './types'
@@ -36,6 +38,10 @@ function App() {
     await navigator.clipboard.writeText(text)
   }, [])
 
+  const handleRedirect = useCallback((shortCode: string) => {
+    console.log('Redirecting to:', shortCode)
+  }, [])
+
   return (
     <BrowserRouter>
       <Routes>
@@ -52,9 +58,21 @@ function App() {
             />
           } 
         />
+        <Route 
+          path="/r/:shortCode" 
+          element={
+            <YonlendirmeEkrani onRedirect={handleRedirect} />
+          } 
+        />
+        <Route 
+          path="/:shortCode" 
+          element={
+            <HataSayfasi code={404} message="Bu kısa link artık mevcut değil" />
+          } 
+        />
         <Route path="/gecmis" element={<div className="p-8"><h1 className="text-2xl font-bold">Geçmiş</h1><p className="text-on-surface-variant mt-2">Bu sayfa yakında eklenecek.</p></div>} />
         <Route path="/ayarlar" element={<div className="p-8"><h1 className="text-2xl font-bold">Ayarlar</h1><p className="text-on-surface-variant mt-2">Bu sayfa yakında eklenecek.</p></div>} />
-        <Route path="*" element={<div className="p-8"><h1 className="text-2xl font-bold">Sayfa Bulunamadı</h1><Link to="/" className="text-primary hover:underline mt-2">Ana sayfaya dön</Link></div>} />
+        <Route path="*" element={<HataSayfasi code={404} message="Sayfa bulunamadı" />} />
       </Routes>
     </BrowserRouter>
   )
