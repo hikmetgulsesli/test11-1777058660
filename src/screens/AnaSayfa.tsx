@@ -2,17 +2,13 @@ import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { UrlInput } from '../components/UrlInput/UrlInput'
 import { ShortLinkResult } from '../components/ShortLinkResult/ShortLinkResult'
-import { generateShortCode } from '../utils/generateCode'
+import { LinkHistory } from '../components/LinkHistory/LinkHistory'
+import { ConfirmDialog } from '../components/ConfirmDialog/ConfirmDialog'
+import type { LinkHistoryEntry } from '../hooks/useLinkHistory'
 import type { ShortLink } from '../types'
 
-interface LinkHistoryItem {
-  shortCode: string
-  originalUrl: string
-  createdAt: Date
-}
-
 interface AnaSayfaProps {
-  links: ShortLink[]
+  history: LinkHistoryEntry[]
   currentShortLink: ShortLink | null
   onCreateLink: (url: string) => void
   onDeleteLink: (id: string) => void
@@ -20,31 +16,25 @@ interface AnaSayfaProps {
   onCopyLink: (text: string) => Promise<void>
 }
 
-export function AnaSayfa({ links, currentShortLink, onCreateLink }: AnaSayfaProps) {
-  const [recentLinks] = useState<LinkHistoryItem[]>(() => {
-    return links.slice(0, 5).map(link => ({
-      shortCode: link.shortCode,
-      originalUrl: link.originalUrl,
-      createdAt: link.createdAt,
-    }))
-  })
+export function AnaSayfa({ history, currentShortLink, onCreateLink, onDeleteLink, onClearAll, onCopyLink }: AnaSayfaProps) {
+  const [showClearConfirm, setShowClearConfirm] = useState(false)
 
   const handleSubmit = useCallback((url: string) => {
     onCreateLink(url)
   }, [onCreateLink])
 
-  const getRelativeTime = (date: Date): string => {
-    const now = new Date()
-    const diffMs = now.getTime() - date.getTime()
-    const diffMins = Math.floor(diffMs / 60000)
-    const diffHours = Math.floor(diffMs / 3600000)
-    const diffDays = Math.floor(diffMs / 86400000)
+  const handleClearClick = useCallback(() => {
+    setShowClearConfirm(true)
+  }, [])
 
-    if (diffMins < 1) return 'Şimdi'
-    if (diffMins < 60) return `${diffMins} Dk Önce`
-    if (diffHours < 24) return `${diffHours} Saat Önce`
-    return `${diffDays} Gün Önce`
-  }
+  const handleConfirmClear = useCallback(() => {
+    setShowClearConfirm(false)
+    onClearAll()
+  }, [onClearAll])
+
+  const handleCancelClear = useCallback(() => {
+    setShowClearConfirm(false)
+  }, [])
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -106,13 +96,9 @@ export function AnaSayfa({ links, currentShortLink, onCreateLink }: AnaSayfaProp
               <h2 className="font-headline text-2xl font-bold tracking-tight">Geçmiş</h2>
               <p className="font-label text-sm text-on-surface-variant">Recent monolithic creations.</p>
             </div>
-            {links.length > 0 && (
+            {history.length > 0 && (
               <button
-                onClick={() => {
-                  if (confirm('Tüm geçmişi silmek istediğinize emin misiniz?')) {
-                    // TODO: implement clear all
-                  }
-                }}
+                onClick={handleClearClick}
                 className="text-error/80 hover:text-error hover:bg-error/10 px-4 py-2 rounded-lg transition-colors font-body text-sm font-medium flex items-center gap-2 cursor-pointer"
               >
                 <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0" }}>delete_sweep</span>
@@ -120,50 +106,14 @@ export function AnaSayfa({ links, currentShortLink, onCreateLink }: AnaSayfaProp
               </button>
             )}
           </div>
-          <div className="flex flex-col gap-4 relative z-10">
-            {recentLinks.length === 0 ? (
-              <p className="text-on-surface-variant text-center py-8">Henüz hiç kısa link oluşturmadınız.</p>
-            ) : (
-              recentLinks.map((link, index) => (
-                <div key={index} className="bg-surface-container-lowest p-5 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 group hover:bg-surface-container-high transition-colors">
-                  <div className="flex flex-col gap-2 min-w-0 flex-grow">
-                    <div className="flex items-center gap-3">
-                      <Link to={`/${link.shortCode}`} className="font-mono text-lg text-on-surface truncate group-hover:text-primary transition-colors cursor-pointer">
-                        kisa.link/{link.shortCode}
-                      </Link>
-                      {index === 0 && (
-                        <span className="font-label text-xs bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded-full">Active</span>
-                      )}
-                    </div>
-                    <p className="font-body text-sm text-on-surface-variant truncate">{link.originalUrl}</p>
-                  </div>
-                  <div className="flex items-center justify-between md:justify-end gap-6 md:w-auto w-full mt-2 md:mt-0">
-                    <span className="font-label text-sm text-on-surface-variant/70">{getRelativeTime(link.createdAt)}</span>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => navigator.clipboard.writeText(`kisa.link/${link.shortCode}`)}
-                        className="text-on-surface-variant hover:text-on-surface p-2 rounded-lg hover:bg-surface-variant transition-colors cursor-pointer"
-                        title="Kopyala"
-                      >
-                        <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0" }}>content_copy</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          const linkItem = links.find(l => l.shortCode === link.shortCode)
-                          if (linkItem) onDeleteLink(linkItem.id)
-                        }}
-                        className="text-on-surface-variant hover:text-error p-2 rounded-lg hover:bg-error/10 transition-colors cursor-pointer"
-                        title="Sil"
-                      >
-                        <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0" }}>delete</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-          {links.length > 5 && (
+          <LinkHistory
+            history={history}
+            onDelete={onDeleteLink}
+            onClearAll={handleClearClick}
+            onCopy={(text) => navigator.clipboard.writeText(text)}
+            maxItems={5}
+          />
+          {history.length > 5 && (
             <div className="flex justify-center mt-4 relative z-10">
               <Link to="/gecmis" className="text-primary hover:text-primary-container font-label text-sm font-medium hover:underline underline-offset-4 transition-all cursor-pointer">
                 Daha Fazla Göster
@@ -172,6 +122,18 @@ export function AnaSayfa({ links, currentShortLink, onCreateLink }: AnaSayfaProp
           )}
         </section>
       </main>
+
+      {/* Clear Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showClearConfirm}
+        title="Geçmişi Temizle"
+        message="Tüm link geçmişini silmek istediğinize emin misiniz? Bu işlem geri alınamaz."
+        confirmLabel="Temizle"
+        cancelLabel="İptal"
+        onConfirm={handleConfirmClear}
+        onCancel={handleCancelClear}
+        variant="danger"
+      />
 
       {/* Footer */}
       <footer className="w-full py-12 mt-auto border-t border-[#131b2e] bg-[#0b1326]">

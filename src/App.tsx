@@ -1,61 +1,36 @@
 import { useState, useCallback } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
-import { AnaSayfa } from './pages/AnaSayfa'
-import type { ShortLink } from './types'
+import { AnaSayfa } from './screens/AnaSayfa'
+import { useLinkHistory } from './hooks/useLinkHistory'
 import { generateShortCode } from './utils/generateCode'
+import type { ShortLink } from './types'
 
 function App() {
-  const [links, setLinks] = useState<ShortLink[]>([
-    {
-      id: '1',
-      shortCode: 'v01d',
-      originalUrl: 'https://www.verylongdomainname.com/article/the-monolith-and-the-void-design-system-v1-draft',
-      createdAt: new Date(Date.now() - 10 * 60 * 1000),
-      clickCount: 0
-    },
-    {
-      id: '2',
-      shortCode: 'p0rt4l',
-      originalUrl: 'https://github.com/design-systems/monolith-void-repo/pull/42',
-      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-      clickCount: 0
-    },
-    {
-      id: '3',
-      shortCode: 'd4rk',
-      originalUrl: 'https://figma.com/file/12345/void-ui-kit?node-id=0-1',
-      createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
-      clickCount: 0
-    }
-  ])
+  const { history, addLink, removeLink, clearHistory } = useLinkHistory()
 
   const [currentShortLink, setCurrentShortLink] = useState<ShortLink | null>(null)
 
-  const createShortLink = useCallback((url: string): ShortLink => {
+  const handleCreateLink = useCallback((url: string) => {
+    const shortCode = generateShortCode()
+    addLink(url, shortCode)
     const newLink: ShortLink = {
       id: Date.now().toString(),
-      shortCode: generateShortCode(),
+      shortCode,
       originalUrl: url,
       createdAt: new Date(),
       clickCount: 0
     }
-    return newLink
-  }, [])
-
-  const handleCreateLink = useCallback((url: string) => {
-    const newLink = createShortLink(url)
-    setLinks(prev => [newLink, ...prev])
     setCurrentShortLink(newLink)
-  }, [createShortLink])
+  }, [addLink])
 
   const handleDeleteLink = useCallback((id: string) => {
-    setLinks(prev => prev.filter(link => link.id !== id))
-  }, [])
+    removeLink(id)
+  }, [removeLink])
 
   const handleClearAll = useCallback(() => {
-    setLinks([])
+    clearHistory()
     setCurrentShortLink(null)
-  }, [])
+  }, [clearHistory])
 
   const handleCopyLink = useCallback(async (text: string): Promise<void> => {
     await navigator.clipboard.writeText(text)
@@ -68,7 +43,7 @@ function App() {
           path="/" 
           element={
             <AnaSayfa
-              links={links}
+              history={history}
               currentShortLink={currentShortLink}
               onCreateLink={handleCreateLink}
               onDeleteLink={handleDeleteLink}
