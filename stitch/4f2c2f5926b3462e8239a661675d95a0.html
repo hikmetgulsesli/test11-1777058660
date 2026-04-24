@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Yönlendiriliyor - Kısa Link</title>
+<!-- Google Fonts: Inter (UI Structure), JetBrains Mono (Data/URLs), Space Grotesk (Metadata) -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#bc4800",
+                        "on-secondary": "#182d63",
+                        "surface-tint": "#b4c5ff",
+                        "surface-dim": "#0b1326",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "error": "#ffb4ab",
+                        "outline": "#8d90a0",
+                        "primary": "#b4c5ff",
+                        "inverse-on-surface": "#283044",
+                        "surface-container": "#171f33",
+                        "tertiary": "#ffb596",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-tertiary-container": "#ffede6",
+                        "on-error": "#690005",
+                        "secondary-container": "#33467e",
+                        "on-primary-fixed": "#00174b",
+                        "secondary-fixed": "#dbe1ff",
+                        "error-container": "#93000a",
+                        "primary-fixed": "#dbe1ff",
+                        "on-tertiary": "#581e00",
+                        "on-background": "#dae2fd",
+                        "on-secondary-container": "#a4b6f5",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "outline-variant": "#434655",
+                        "on-surface": "#dae2fd",
+                        "on-primary": "#002a78",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "surface-variant": "#2d3449",
+                        "secondary": "#b4c5ff",
+                        "surface": "#0b1326",
+                        "inverse-surface": "#dae2fd",
+                        "tertiary-fixed": "#ffdbcd",
+                        "on-surface-variant": "#c3c6d7",
+                        "on-primary-container": "#eeefff",
+                        "surface-container-lowest": "#060e20",
+                        "surface-bright": "#31394d",
+                        "on-error-container": "#ffdad6",
+                        "background": "#0b1326",
+                        "primary-container": "#2563eb",
+                        "surface-container-highest": "#2d3449",
+                        "on-secondary-fixed": "#00174b",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "surface-container-high": "#222a3d",
+                        "on-secondary-fixed-variant": "#31447b",
+                        "inverse-primary": "#0053db",
+                        "surface-container-low": "#131b2e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "display": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Space Grotesk"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface-dim text-on-surface font-body h-screen w-full flex flex-col overflow-hidden relative">
+<!-- The Void: Background ambient lighting -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-container opacity-5 rounded-full blur-[120px] pointer-events-none"></div>
+<!-- Main Content Canvas (Navigation suppressed due to transitional state) -->
+<main class="flex-1 flex flex-col items-center justify-center relative z-10 px-6">
+<!-- Status Container -->
+<div class="flex flex-col items-center max-w-md w-full">
+<!-- Connection Visual (Static representation of loading/routing) -->
+<div class="flex items-center justify-center gap-4 mb-12">
+<!-- Source -->
+<div class="w-16 h-16 rounded-xl bg-surface-container-high border border-outline-variant/10 flex items-center justify-center shadow-2xl relative">
+<span class="material-symbols-outlined text-primary text-2xl">link</span>
+<!-- Active Indicator dot -->
+<div class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-primary-container shadow-[0_0_8px_rgba(37,99,235,0.8)]"></div>
+</div>
+<!-- Path/Progress -->
+<div class="flex flex-col items-center justify-center gap-2 w-24">
+<span class="font-label text-xs tracking-wider text-on-surface-variant uppercase">Bağlanıyor</span>
+<div class="flex justify-between w-full">
+<div class="w-2 h-[2px] rounded-full bg-primary-container shadow-[0_0_4px_rgba(37,99,235,0.6)]"></div>
+<div class="w-2 h-[2px] rounded-full bg-primary-container shadow-[0_0_4px_rgba(37,99,235,0.6)]"></div>
+<div class="w-2 h-[2px] rounded-full bg-primary-container shadow-[0_0_4px_rgba(37,99,235,0.6)]"></div>
+<div class="w-2 h-[2px] rounded-full bg-surface-variant"></div>
+<div class="w-2 h-[2px] rounded-full bg-surface-variant"></div>
+<div class="w-2 h-[2px] rounded-full bg-surface-variant"></div>
+</div>
+</div>
+<!-- Destination -->
+<div class="w-16 h-16 rounded-xl bg-surface-container-lowest flex items-center justify-center shadow-[inset_0_4px_12px_rgba(0,0,0,0.4)] border border-surface-container-low">
+<span class="material-symbols-outlined text-outline text-2xl" style="font-variation-settings: 'wght' 200;">public</span>
+</div>
+</div>
+<!-- Typography Content -->
+<div class="text-center space-y-4 w-full">
+<h1 class="text-2xl md:text-3xl font-headline font-semibold tracking-tight text-on-surface">
+                    Orijinal adrese yönlendiriliyorsunuz...
+                </h1>
+<div class="pt-4 flex flex-col items-center gap-2">
+<span class="font-label text-sm text-on-surface-variant">Hedef:</span>
+<!-- Data representation using mono font inside a specialized container -->
+<div class="px-4 py-2 bg-surface-container-low rounded-lg inline-flex items-center gap-2">
+<span class="material-symbols-outlined text-outline-variant text-sm">lock</span>
+<span class="font-mono text-primary text-sm tracking-wide">Yükleniyor...</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Subtle Footer for transitional screen (Not standard Footer component) -->
+<div class="absolute bottom-8 left-0 right-0 flex justify-center text-center px-4">
+<span class="font-label text-xs tracking-wider text-outline-variant">Kısa Link Güvenli Yönlendirme Servisi</span>
+</div>
+</body></html>

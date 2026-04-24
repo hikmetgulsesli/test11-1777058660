@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kısa Link - Geçmişi Temizle</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#bc4800",
+                        "on-secondary": "#182d63",
+                        "surface-tint": "#b4c5ff",
+                        "surface-dim": "#0b1326",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "error": "#ffb4ab",
+                        "outline": "#8d90a0",
+                        "primary": "#b4c5ff",
+                        "inverse-on-surface": "#283044",
+                        "surface-container": "#171f33",
+                        "tertiary": "#ffb596",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-tertiary-container": "#ffede6",
+                        "on-error": "#690005",
+                        "secondary-container": "#33467e",
+                        "on-primary-fixed": "#00174b",
+                        "secondary-fixed": "#dbe1ff",
+                        "error-container": "#93000a",
+                        "primary-fixed": "#dbe1ff",
+                        "on-tertiary": "#581e00",
+                        "on-background": "#dae2fd",
+                        "on-secondary-container": "#a4b6f5",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "outline-variant": "#434655",
+                        "on-surface": "#dae2fd",
+                        "on-primary": "#002a78",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "surface-variant": "#2d3449",
+                        "secondary": "#b4c5ff",
+                        "surface": "#0b1326",
+                        "inverse-surface": "#dae2fd",
+                        "tertiary-fixed": "#ffdbcd",
+                        "on-surface-variant": "#c3c6d7",
+                        "on-primary-container": "#eeefff",
+                        "surface-container-lowest": "#060e20",
+                        "surface-bright": "#31394d",
+                        "on-error-container": "#ffdad6",
+                        "background": "#0b1326",
+                        "primary-container": "#2563eb",
+                        "surface-container-highest": "#2d3449",
+                        "on-secondary-fixed": "#00174b",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "surface-container-high": "#222a3d",
+                        "on-secondary-fixed-variant": "#31447b",
+                        "inverse-primary": "#0053db",
+                        "surface-container-low": "#131b2e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter", "sans-serif"],
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Space Grotesk", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-label { font-family: 'Space Grotesk', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .glass-overlay {
+            background-color: rgba(11, 19, 38, 0.85);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="bg-[#0b1326] dark:bg-[#0b1326] text-[#2563eb] dark:text-[#2563eb] font-['Inter'] font-medium tracking-tight fixed top-0 w-full z-40 bg-[#131b2e] shadow-none flex justify-between items-center h-16 px-8 max-w-full mx-auto">
+<div class="flex items-center gap-8">
+<a class="font-['Space_Grotesk'] text-2xl font-bold tracking-tighter text-[#2563eb]" href="#">Kısa Link</a>
+<nav class="hidden md:flex gap-6">
+<a class="text-[#2563eb] border-b-2 border-[#2563eb] pb-1 hover:bg-[#222a3d] hover:scale-[1.02] transition-all duration-200 active:scale-[0.98]" href="#">Geçmiş</a>
+<a class="text-[#434655] hover:text-[#eeefff] hover:bg-[#222a3d] hover:scale-[1.02] transition-all duration-200 active:scale-[0.98]" href="#">API</a>
+<a class="text-[#434655] hover:text-[#eeefff] hover:bg-[#222a3d] hover:scale-[1.02] transition-all duration-200 active:scale-[0.98]" href="#">Fiyatlandırma</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex gap-4">
+<button class="text-[#434655] hover:text-[#eeefff] hover:bg-[#222a3d] hover:scale-[1.02] transition-all duration-200 active:scale-[0.98] p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="text-[#434655] hover:text-[#eeefff] hover:bg-[#222a3d] hover:scale-[1.02] transition-all duration-200 active:scale-[0.98] p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+<button class="bg-primary-container text-on-primary-container px-4 py-2 rounded-md text-sm font-medium hover:bg-[#222a3d] hover:scale-[1.02] transition-all duration-200 active:scale-[0.98]">Giriş Yap</button>
+</div>
+</header>
+<!-- Main Content (Blurred Background context) -->
+<main class="flex-grow pt-24 px-4 sm:px-8 max-w-7xl mx-auto w-full filter blur-sm transition-all duration-300">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h1 class="text-display-lg font-headline font-bold text-on-surface mb-2">Link Geçmişi</h1>
+<p class="text-title-md text-on-surface-variant font-label">Bugüne kadar kısalttığınız tüm bağlantılar.</p>
+</div>
+<button class="bg-surface-container-high text-error px-4 py-2 rounded-md text-sm font-medium hover:bg-surface-container-highest transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">delete</span>
+                Temizle
+            </button>
+</div>
+<div class="space-y-4">
+<!-- Dummy List Item 1 -->
+<div class="bg-surface-container-low p-6 rounded-xl flex items-center justify-between group">
+<div>
+<a class="text-title-lg font-mono text-primary mb-1 block group-hover:text-primary-fixed transition-colors" href="#">kisa.link/x7y9Z</a>
+<p class="text-body-sm text-outline font-body truncate max-w-md">https://verylongandcomplicatedurl.com/article/12345/design-systems-in-2024</p>
+</div>
+<div class="flex items-center gap-6 text-on-surface-variant font-label text-sm">
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">bar_chart</span> 1,204</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> 2 Eki</div>
+<button class="text-outline hover:text-on-surface transition-colors p-2 rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined">content_copy</span>
+</button>
+</div>
+</div>
+<!-- Dummy List Item 2 -->
+<div class="bg-surface-container-low p-6 rounded-xl flex items-center justify-between group">
+<div>
+<a class="text-title-lg font-mono text-primary mb-1 block group-hover:text-primary-fixed transition-colors" href="#">kisa.link/a1b2C</a>
+<p class="text-body-sm text-outline font-body truncate max-w-md">https://anotherexample.com/campaign-tracking?utm_source=twitter</p>
+</div>
+<div class="flex items-center gap-6 text-on-surface-variant font-label text-sm">
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">bar_chart</span> 45</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> 1 Eki</div>
+<button class="text-outline hover:text-on-surface transition-colors p-2 rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined">content_copy</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Modal Overlay & Dialog -->
+<div class="fixed inset-0 z-50 flex items-center justify-center px-4 glass-overlay">
+<!-- Dialog Box -->
+<div class="bg-surface-container-highest w-full max-w-md rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.4)] relative overflow-hidden">
+<!-- Left border accent for visual hierarchy -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error"></div>
+<div class="p-8">
+<!-- Icon & Title -->
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-full bg-error-container/20 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-2xl" data-icon="warning">warning</span>
+</div>
+<h2 class="text-display-sm font-headline font-semibold text-on-surface">Geçmişi Temizle</h2>
+</div>
+<!-- Message -->
+<p class="text-body-lg text-on-surface-variant font-body mb-8 leading-relaxed">
+                    Tüm kısaltılmış link geçmişiniz silinecek. Bu işlem geri alınamaz. Emin misiniz?
+                </p>
+<!-- Actions -->
+<div class="flex justify-end gap-3 mt-8 pt-4 border-t border-surface-container-low">
+<button class="px-5 py-2.5 rounded-md font-medium text-sm text-on-surface-variant border border-outline-variant/15 hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 active:scale-[0.98]">
+                        İptal
+                    </button>
+<button class="px-5 py-2.5 rounded-md font-medium text-sm bg-error text-on-error hover:bg-error-container hover:text-on-error-container transition-all duration-200 active:scale-[0.98] flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="delete_forever">delete_forever</span>
+                        Evet, Temizle
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

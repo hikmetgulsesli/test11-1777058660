@@ -1,0 +1,176 @@
+# Kısa Link — Ürün Gereksinimleri Dokümanı
+
+## 1. Genel Bakış
+
+Kısa Link, kullanıcıların uzun URL'leri kısa ve akılda kalıcı hale dönüştürerek kolayca paylaşmalarını sağlayan minimalist bir web uygulamasıdır. Türkçe arayüzü ile yerel kullanıcılara hizmet verir. Tek sayfalık, hızlı ve mobil uyumlu bir deneyim sunar — kullanıcı URL girer, kısa link üretilir ve tek tıkla panoya kopyalanır. Herhangi bir kayıt veya giriş gerektirmez; bağlantılar tarayıcıda yerel olarak saklanır.
+
+Hedef kitle: Türkçe konuşan sosyal medya kullanıcıları, içerik üreticileri, Pazarlama profesyonelleri ve messenger kullanıcıları.
+
+## 2. Hedefler
+
+- Kullanıcıların uzun URL'leri saniyeler içinde kısa bağlantılara dönüştürmesi.
+- Üretilen kısa linklerin tek tıkla panoya kopyalanması.
+- Kullanıcının kendi oluşturduğu link geçmişine tarayıcıdan erişebilmesi (localStorage).
+- Tüm cihazlarda (mobil, tablet, masaüstü) kusursuz çalışması.
+- İlk yükleme süresinin 2 saniyenin altında olması.
+- Erişilebilir ve WCAG 2.1 AA uyumlu arayüz.
+
+## 3. Tech Stack Detayı
+
+- **Framework:** React 18.3 (Vite 5 ile)
+- **Build:** Vite 5.x — hızlı HMR ve optimize bundle
+- **Styling:** CSS Modules — scoped styling
+- **State:** React useState + useReducer
+- **Storage:** localStorage — link geçmişi için
+- **Routing:** React Router DOM v6
+- **TypeScript:** Evet, katı mod açık
+- **URL Kısaltma:** Base62 encode, 8 karakterli slug, nanoid
+- **Icons:** Lucide React
+
+## 4. Fonksiyonel Gereksinimler
+
+### 4.1 URL Girişi
+- Tek büyük input alanı: placeholder "Uzun URL'nizi yapıştırın..."
+- Girdi doğrulaması: geçerli HTTP/HTTPS URL formatı kontrolü
+- Boş input: "Lütfen geçerli bir URL girin"
+- Geçersiz format: "Girdiğiniz adres geçerli bir URL değil. http:// veya https:// ile başlamalı."
+- Paste yapıldığında otomatik trim + validate
+
+### 4.2 Kısa Link Üretimi
+- "Kısalt" butonu — sadece geçerli URL'de aktif
+- Tıklandığında loading spinner (500ms minimum)
+- Üretilen kod: 8 karakter, Base62 (a-z, A-Z, 0-9)
+- Kısa link: `{window.location.origin}/{code}`
+- Başarılıysa sonuç kartı görünür
+
+### 4.3 Panoya Kopyalama
+- Kısa link yanında "Kopyala" butonu
+- Clipboard API ile kopyalama
+- Başarı: "Kopyalandı ✓", 2 saniye sonra "Kopyala" döner
+- Başarısız: "Kopyalanamadı, lütfen manuel kopyalayın"
+- Link metnine tıklamak da kopyalar
+
+### 4.4 Link Geçmişi
+- localStorage: key "kisa-link-history"
+- Her kayıt: { originalUrl, shortCode, shortUrl, createdAt }
+- Son 20 kayıt, tarihe göre sıralı
+- Her satırda: kısa link, orijinal URL (kısaltılmış), tarih, "Sil" butonu
+- "Tümünü Temizle" — onay dialogu ile
+- Boş durum: "Henüz kısaltılmış linkiniz yok"
+- Tarih: Türkçe — "24 Nis 2026, 19:24"
+
+### 4.5 Kısa Link Yönlendirme
+- `/r/:code` rotası — localStorage'dan orijinal URL'yi bulur, yönlendirir
+- Bulunamazsa: "Bu kısa link artık mevcut değil" sayfası
+- Yönlendirme öncesi 1 saniye bekleme
+
+## 5. Veri Modeli
+
+```
+interface ShortLink {
+  shortCode: string;      // 8 karakter Base62 kod
+  originalUrl: string;     // Orijinal uzun URL
+  shortUrl: string;        // Tam kısa URL
+  createdAt: string;       // ISO 8601 tarih
+}
+```
+
+localStorage: key "kisa-link-history", max 50 kayıt, FIFO
+
+## 6. UI/UX Gereksinimler
+
+### 6.1 Design System
+
+**Aesthetic:** Minimal — beyaz alan, keskin tipografi, tek vurgu renk
+
+**Renk Paleti:**
+- Primary: #2563EB
+- Primary Hover: #1D4ED8
+- Secondary: #64748B
+- Background: #FFFFFF
+- Surface: #F8FAFC
+- Text Primary: #0F172A
+- Text Secondary: #64748B
+- Border: #E2E8F0
+- Success: #10B981
+- Error: #EF4444
+- Warning: #F59E0B
+
+**Tipografi:**
+- Heading/Body: Inter, fallback system-ui, sans-serif
+- Monospace (URL): JetBrains Mono, monospace
+
+**Icon Library:** Lucide React
+
+### 6.2 Spacing & Components
+
+- Spacing: 4/8/12/16/24/32/48/64px
+- Border radius: 8px (input/button), 12px (card)
+- Shadow: 0 1px 3px rgba(0,0,0,0.08)
+
+**Buton:** px-16, py-12, rounded-lg, font-500
+**Input:** full width, border, rounded-lg, px-16, py-12, focus ring
+
+## 7. Non-Functional Requirements
+
+### 7.1 Performans
+- İlk yükleme < 2 saniye
+- TTI < 1.5 saniye
+- Bundle < 100KB gzipped
+
+### 7.2 Erişilebilirlik (WCAG 2.1 AA)
+- Klavye navigasyonu: Tab ile tüm elementlere erişim
+- ARIA labels: tüm input, button, link
+- Kontrast >= 4.5:1 (text), 3:1 (large text)
+- Focus ring: 2px primary, tüm interactive elementlerde
+- Touch hedefleri >= 44x44px
+
+### 7.3 Tarayıcı Desteği
+- Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
+- iOS Safari 14+, Android Chrome 90+
+- Responsive: 320px → 1920px
+
+## 8. Proje Yapısı
+
+```
+src/
+├── components/
+│   ├── UrlInput/
+│   ├── ShortLinkResult/
+│   ├── LinkHistory/
+│   ├── CopyButton/
+│   └── ConfirmDialog/
+├── hooks/
+│   ├── useLocalStorage.ts
+│   └── useClipboard.ts
+├── utils/
+│   ├── generateCode.ts
+│   └── validateUrl.ts
+├── pages/
+│   ├── Home/
+│   └── Redirect/
+├── types/
+│   └── index.ts
+├── styles/
+│   └── globals.css
+├── App.tsx
+└── main.tsx
+```
+
+## 9. Window State
+
+```javascript
+window.app = {
+  state: 'idle', // 'idle' | 'loading' | 'success' | 'error'
+  lastCreated: ShortLink | null,
+  history: ShortLink[],
+}
+```
+
+## 10. Ekranlar
+
+| # | Ekran Adı | Tür | Açıklama |
+|---|-----------|-----|----------|
+| 1 | Ana Sayfa | utility | URL giriş formu, sonuç kartı, link geçmişi tablosu |
+| 2 | Yönlendirme | redirect | /r/:code — orijinal URL'ye yönlendirme veya hata |
+| 3 | Hata Sayfası | error | Kısa link bulunamadığında hata ekranı |
